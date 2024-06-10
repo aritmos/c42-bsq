@@ -35,6 +35,6 @@ bool vec_push(t_vec *vec, char c) {
   return true;
 }
 
-inline bool vec_has_space(t_vec *vec, size_t nbytes) {
+inline bool vec_has_space(const t_vec *vec, size_t nbytes) {
   return (vec->cap - vec->len) >= nbytes;
 }

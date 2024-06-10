@@ -1,6 +1,6 @@
 #include "utils.h"
 
-void ft_memcpy(char *dest, char *src, size_t count) {
+void ft_memcpy(char *dest, const char *src, size_t count) {
   size_t i;
 
   i = 0;

@@ -7,7 +7,7 @@
 
 // --- MEMORY -----------------------------------------------------------------
 
-void ft_memcpy(char *dest, char *src, size_t count);
+void ft_memcpy(char *dest, const char *src, size_t count);
 
 // --- VEC --------------------------------------------------------------------
 
@@ -34,7 +34,7 @@ bool vec_grow(t_vec *vec, size_t new_cap);
 bool vec_push(t_vec *vec, char c);
 
 // Checks if a vec has enough space
-bool vec_has_space(t_vec *vec, size_t nbytes);
+bool vec_has_space(const t_vec *vec, size_t nbytes);
 
 // --- I/O --------------------------------------------------------------------
 
