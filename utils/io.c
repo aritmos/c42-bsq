@@ -1,35 +1,27 @@
 #include "utils.h"
 
-ssize_t read_line(int fd, char *buf, size_t buf_size) {
-  int i;
-  ssize_t bytes_read;
-
-  i = 0;
-  while (i < buf_size) {
-    bytes_read = read(fd, buf + i, 1);
-    if (bytes_read == -1)
-      return -1;
-    if (bytes_read == 0 || buf[i] == '\n')
-      break;
-    i++;
-  }
-  return i;
-}
-
-ssize_t read_line_vec(int fd, t_vec *vec) {
+t_str *read_line(int fd) {
+  t_vec vec;
+  t_str *str;
   ssize_t bytes_read;
   bool ok;
 
   bytes_read = 0;
+  ok = vec_create(&vec, 4);
+  if (!ok)
+    return NULL;
   while (true) {
-    ok = read_char_vec(fd, vec);
+    ok = read_char_vec(fd, &vec);
     if (!ok)
-      return -1;
+      return NULL;
     bytes_read += 1;
-    if (vec->buf[vec->len - 1] == '\n')
+    if (vec.buf[vec.len - 1] == '\n')
       break;
   }
-  return bytes_read;
+  str = vec_to_str(&vec);
+  free(vec.buf);
+
+  return vec_to_str(&vec);
 }
 
 bool vec_read_char(int fd, t_vec *vec) {

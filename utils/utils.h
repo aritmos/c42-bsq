@@ -5,17 +5,33 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-// --- MEMORY -----------------------------------------------------------------
+// --- TYPES ------------------------------------------------------------------
 
-void ft_memcpy(char *dest, const char *src, size_t count);
-
-// --- VEC --------------------------------------------------------------------
+typedef struct s_str {
+  char *buf;
+  size_t len;
+} t_str;
 
 typedef struct s_vec {
   char *buf;
   size_t len;
   size_t cap;
 } t_vec;
+
+// --- MEMORY -----------------------------------------------------------------
+
+void ft_memcpy(char *dest, const char *src, size_t count);
+
+// --- STR --------------------------------------------------------------------
+
+// Copies the contents of a vec into a string.
+// SAFETY: may return `NULL`.
+t_str *vec_to_str(t_vec *vec);
+
+// Drops the string (and its internal buffer).
+void str_drop(t_str *str);
+
+// --- VEC --------------------------------------------------------------------
 
 // Creates a new `t_vec` and stores it in the given pointer.
 // Returns `true` if succeeded, `false` if errored.
@@ -38,22 +54,22 @@ bool vec_has_space(const t_vec *vec, size_t nbytes);
 
 // --- I/O --------------------------------------------------------------------
 
-// Reads a line from the given file descriptor into a buffer.
-// Ends reading once it has filled the buffer or encountered a newline
-// character. Returns the number of read bytes or `-1` if an error occurred.
-// SAFETY: Caller ensures (by magic) that `buf` is large enough for
-// the line that is to be written to it.
-ssize_t read_line(int fd, char *buf, size_t buf_size);
-
-// Reads a line dynamically into a `t_vec` (including the `\n`), growing it as
-// needed. Returns the number of read bytes (including `\n`) or `-1` if an error
-// occurred.
-// SAFETY: Caller guarantees `vec` is a valid pointer.
-ssize_t read_line_vec(int fd, t_vec *vec);
+// Reads a line from the given file descriptor into a string.
+// Returns `NULL` if it got to EOF before finding a newline or if errored
+// internally.
+t_str *read_line(int fd);
 
 // Reads a char from the given file descriptor into char.
 // Returns `true` if it correctly read the char, and `false` if if could not
 // read a char (error or EOF) or had any other internal error.
 bool read_char_vec(int fd, t_vec *vec);
+
+// --- PARSING ----------------------------------------------------------------
+
+// Parses an unsigned int, returns `-1` if the format was invalid.
+ssize_t ft_atoui(const char *buf, size_t nbytes);
+
+// Returns `true` if a char is printable (visible), else `false`.
+bool char_is_printable(char c);
 
 #endif
